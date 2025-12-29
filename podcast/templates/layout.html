@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Podcast Library</title>
+    <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/main.css') }}"
+    />
+    {% include "icon.html" %}
+</head>
+
+<body>
+{% include "user_status.html" %}
+<div id="body">
+    {% include "navbar.html" %}
+    <div id="content-2">
+        {% include "header.html" %}
+        {% block content %} {% endblock %}
+    </div>
+</div>
+</body>
+</html>

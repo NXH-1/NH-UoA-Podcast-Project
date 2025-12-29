@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
+        <nav>
+          <img id="logo" src="../static/image/podlogo.png" />
+          <div class="heading">Pod Library
+              {% if 'user_name' in session %}
+                  <p> Welcome, {{ session['user_name'] }}!</p>
+              {% else %}
+                    <p>_______</p>
+              {% endif %}
+             <div id="main">
+                <div class="search-container">
+                    <form method="POST" action="{{ url_for('search_bp.search') }}" class="search-form">
+
+                        <input type="search" placeholder="Search Podcast..." class="search-input" name="searched">
+
+
+                        <button type="submit" class="search-button"><i class="fas fa-search change-color"></i></button>
+                        <div class="custom-select">
+                            <select name="filter">
+                                <option value="title">Title</option>
+                                <option value="author">Author</option>
+                                <option value="category">Category</option>>
+                                <option value="language">Language</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+             </div>
+          <div class="navbar">
+            <ul>
+              <a href="{{ url_for('home_bp.home') }}"><li>Home</li></a>
+              <a href="{{ url_for('podcasts_bp.show_podcasts') }}"><li>Podcasts</li></a>
+              <a href="{{ url_for('playlist_bp.show_playlist') }}"><li>My Playlists</li></a>
+            </ul>
+          </div>
+          <div id="nav-footer">
+            CS235 Pod Library | Created by <br />
+              nhua011 | alia155 | zzho256
+          </div>
+        </nav>

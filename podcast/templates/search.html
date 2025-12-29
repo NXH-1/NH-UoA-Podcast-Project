@@ -1,0 +1,42 @@
+{% extends 'layout.html' %} {% block content %}
+    <h1>You searched for: "{{ query }}" <br><b>by Podcast {{ filter_by }}</b></h1>
+    <br>
+    <div id="search-block">
+        {% if total==0 %}
+            <strong>No Results Found for <i>{{query}}</i></strong>
+        {% else %}
+            {% if page > 1 %}
+                    <a class="button" href="{{ url_for('search_bp.search', query=query, filter_by=filter_by, page=1) }}">First</a>
+                    <a class="button" href="{{ url_for('search_bp.search', query=query, filter_by=filter_by, page=page-1) }}">Previous</a>
+
+                    {% endif %}
+                        <span>Page {{page}} of {{total}}</span>
+                    {% if page < total %}
+                    <a class="button" href="{{ url_for('search_bp.search', query=query, filter_by=filter_by, page=page+1) }}">Next</a>
+                    <a class="button" href="{{ url_for('search_bp.search', query=query, filter_by=filter_by, page=total) }}">Last</a>
+            {% endif %}
+        {% endif %}
+        <ul>
+            {% for result in results %}
+            <li><a href="{{ url_for('description_bp.show_description', podcast_id=result.id) }}">
+                <div class="search-item">
+                    <img src="{{ result.image }}">
+                    <span><strong>{{ result.title }}</strong> by {{ result.author.name }}</span>
+                </div>
+            </a></li>
+            {% endfor %}
+        </ul>
+        {% if total!=0 %}
+            {% if page > 1 %}
+                    <a class="button" href="{{ url_for('search_bp.search', query=query, filter_by=filter_by, page=1) }}">First</a>
+                    <a class="button" href="{{ url_for('search_bp.search', query=query, filter_by=filter_by, page=page-1) }}">Previous</a>
+
+                    {% endif %}
+                        <span>Page {{page}} of {{total}}</span>
+                    {% if page < total %}
+                    <a class="button" href="{{ url_for('search_bp.search', query=query, filter_by=filter_by, page=page+1) }}">Next</a>
+                    <a class="button" href="{{ url_for('search_bp.search', query=query, filter_by=filter_by, page=total) }}">Last</a>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}

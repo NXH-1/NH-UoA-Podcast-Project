@@ -1,0 +1,46 @@
+{% extends 'layout.html' %} {% block content %}
+
+            <h1>Home</h1>
+            <br>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    <br>
+                    {% if messages %}
+                        <div class="login-indicator">
+                            {% for category, message in messages %}
+                                {% if message == "Login successful!" %}
+                                        {{ message }}
+
+                                {% elif message == "Logout successful." %}
+                                        {{ message }}
+
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+            <div id="container2">
+
+            Welcome to CS235's Podcast Library! <br>
+                Here you can browse for your favourite Podcasts!<br>
+                    Website created by Neil Huang, Anthony Liang, Ziyang Zhou
+
+            </div>
+            <br>
+            <h2 id="heading-2">Here is a few Random Suggestions:</h2>
+            <div id="podcast-grid">
+                {% for podcast in podcasts %}
+                  <div class="podcast-item">
+                    <a href="{{ url_for('description_bp.show_description', podcast_id=podcast.id) }}">
+                      <img src="{{ podcast.image }}" alt="Podcast logo">
+                      <div class="podcast-info">
+                        <h3>{{ podcast.title }}</h3>
+                        <p>{{ podcast.categories }}</p>
+                      </div>
+                    </a>
+                  </div>
+                {% endfor %}
+            </div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'layout.html' %} {% block content %}
+
+        <h1>Podcasts</h1>
+        <main id="main">
+            <div id="podcast">
+                {% if page > 1 %}
+                <a class="button" href="{{ url_for('podcasts_bp.show_podcasts', page=1) }}">First</a>
+                <a class="button" href="{{ url_for('podcasts_bp.show_podcasts', page=page-1) }}">Previous</a>
+
+                {% endif %}
+                    <span>Page {{page}} of {{total}}</span>
+                {% if page < total %}
+                <a class="button" href="{{ url_for('podcasts_bp.show_podcasts', page=page+1) }}">Next</a>
+                <a class="button" href="{{ url_for('podcasts_bp.show_podcasts', page=total) }}">Last</a>
+                {% endif %}
+                <table>
+
+                    {% for podcast in podcasts_on_page %}
+                        <tr>
+                        <th><b>...................</b></th>
+                            <th>
+                              <a href="{{ url_for('description_bp.show_description', podcast_id=podcast.id) }}">
+                                <div class="podcast-list">
+                                  <img src="{{ podcast.image }}" alt="Podcast Logo">
+                                </div>
+                              </a>
+                            </th>
+                            <th>
+                                <a href="{{ url_for('description_bp.show_description', podcast_id=podcast.id) }}">
+                                    <span>{{ podcast.title }}</span><br>
+                                    <small> By {{ podcast.author }}</small>
+                                </a>
+                            </th>
+                        <th><b>...................</b></th>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+                {% if page > 1 %}
+                <a class="button" href="{{ url_for('podcasts_bp.show_podcasts', page=1) }}">First</a>
+                <a class="button" href="{{ url_for('podcasts_bp.show_podcasts', page=page-1) }}">Previous</a>
+
+                {% endif %}
+                    <span>Page {{page}} of {{total}}</span>
+                {% if page < total %}
+                <a class="button" href="{{ url_for('podcasts_bp.show_podcasts', page=page+1) }}">Next</a>
+                <a class="button" href="{{ url_for('podcasts_bp.show_podcasts', page=total) }}">Last</a>
+                {% endif %}
+            </div>
+        </main>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'layout.html' %} {% block content %}
+            <h1>{{ name }}'s Playlist</h1>
+            <br>
+            <div id="playlist-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                <br>
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if message == "Episode removed" %}
+                            <div class="flash-message flash-remove">
+                                <p> {{ message }} </p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            </div>
+            <div class="play">
+                {% if total > 1 %}
+                    {% if page > 1 %}
+                    <a class="button" href="{{ url_for('playlist_bp.show_playlist',
+                                            page=1, counter=counter-1) }}">First</a>
+                    <a class="button" href="{{ url_for('playlist_bp.show_playlist',
+                                            page=page-1, counter=counter-1) }}">Previous</a>
+
+                    {% endif %}
+                        <span>Page {{page}} of {{total}}</span>
+                    {% if page < total %}
+                    <a class="button" href="{{ url_for('playlist_bp.show_playlist',
+                                            page=page+1, counter=counter-1) }}">Next</a>
+                    <a class="button" href="{{ url_for('playlist_bp.show_playlist',
+                                            page=total, counter=counter-1) }}">Last</a>
+                    {% endif %}
+                {% endif %}
+                <table>
+                    <tr>
+                        <th><b>||||||||||||||||||||||||</b></th>
+                        <th> </th>
+                        <th><b>||||||||||||||||||||||||</b></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th><i>Episode Name</i></th>
+                        <th><i>Date</i></th>
+                        <th><i>Audio</i></th>
+                        <th><i>Podcast</i></th>
+                        <th></th>
+                    {% for episode in ep_list %}
+                    <tr>
+                        <th><b>||||||||||||||||||||||||</b></th>
+                        <th> </th>
+                        <th><b>||||||||||||||||||||||||</b></th>
+                    </tr>
+                    </tr>
+
+                        <th></th>
+                        <th class="ep_title">{{ episode.title }}</th>
+                        <th>{{ episode.pub_date }}</th>
+                        <th><audio controls><source src="{{ episode.link }}" type="audio/mpeg"></audio></th>
+                        <th><a href="{{ url_for('description_bp.show_description', podcast_id=ep_pod_dict[episode].id) }}">{{ ep_pod_dict[episode].title }}</a></th>
+                        <th><a class="button" href="{{ url_for('playlist_bp.remove_episode', episode_id=episode.id, page=page) }}">Remove</a></th>
+
+                        <th></th>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th><b>||||||||||||||||||||||||</b></th>
+                        <th> </th>
+                        <th><b>||||||||||||||||||||||||</b></th>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <br>
+{% endblock %}

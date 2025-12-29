@@ -1,0 +1,206 @@
+{% extends 'layout.html' %} {% block content %}
+            <h1>Description</h1>
+            <div id="container">
+              <main id="des-main">
+                <div id="description">
+                    <a class="button" onclick="history.go({{ counter }})">Back</a>
+                    <br>
+                    <br>
+                    <!-- podcast_to_show_reviews is temporary -->
+                    <h2 id="pod_title">{{ podcast.title }}</h2>
+                    <br>
+                    <h3><strong>Rating: {{ average_rating['number'] }} | {{ average_rating['stars'] }}</strong> <i>{{ podcast_to_show_reviews }} comments</i> </h3>
+                    <div id="playlist-messages">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            <br>
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    {% if message == "Episode added" %}
+                                        <div class="flash-message flash-add">
+                                            <p> {{ message }} </p>
+                                        </div>
+                                    {% elif message == "Episode removed" %}
+                                        <div class="flash-message flash-remove">
+                                            <p> {{ message }} </p>
+                                        </div>
+                                    {% elif message == "commented" %}
+                                        <div class="flass-message flash-commented">
+                                            <p> {{ message }} </p>
+                                        </div>
+                                    {% elif message == "All episodes in Podcast ADDED" %}
+                                        <div class="flass-message flash-commented">
+                                            <p> {{ message }} </p>
+                                        </div>
+                                    {% elif message == "All episodes in Podcast REMOVED" %}
+                                        <div class="flass-message flash-commented">
+                                            <p> {{ message }} </p>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    <a class="button" href="{{ url_for('description_bp.add_podcast_to_playlist', podcast_id=podcast.id, counter=counter-1, page=page) }}">Add all Episodes</a>
+                    <a class="button" href="{{ url_for('description_bp.remove_podcast_from_playlist', podcast_id=podcast.id, counter=counter-1, page=page) }}">Remove all Episodes</a>
+                    <div class="row">
+                        <div class= "column">
+                            <h2>Details</h2>
+                            <br>
+                            <table>
+                                <tr>
+                                    <th><b>||||||||||||||||||||||||</b></th>
+                                    <th> </th>
+                                    <th><b>||||||||||||||||||||||||</b></th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th><i>Author:</i> {{ podcast.author }} </th>
+                                    <th>          </th>
+
+                                <tr>
+                                    <th></th>
+                                    <th><i>Language:</i> {{ podcast.language }} </th>
+                                    <th>          </th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th><i>About:</i> {{ podcast.description }} </th>
+                                    <th>          </th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th><i>Categories: </i> {{ podcast.categories }} </th>
+                                    <th>          </th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th><i>Website: </i> {{ podcast.website }} </th>
+                                    <th>          </th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th><i>iTunes ID: </i> {{ podcast.itunes_id }} </th>
+                                    <th>          </th>
+                                </tr>
+                                <tr>
+                                    <th><b>||||||||||||||||||||||||</b></th>
+                                    <th> </th>
+                                    <th><b>||||||||||||||||||||||||</b></th>
+                                </tr>
+                            </table>
+                        </div>
+                        <!--Added episode list-->
+
+
+                        <div class="column">
+                            <h2>Episode List</h2>
+                                <br>
+                            {% if episodes is defined and episodes|length > 0 %}
+                                {% if total > 1 %}
+                                    {% if page > 1 %}
+                                    <a class="button" href="{{ url_for('description_bp.show_description',
+                                                            podcast_id=podcast.id, page=1, counter=counter-1) }}">First</a>
+                                    <a class="button" href="{{ url_for('description_bp.show_description',
+                                                            podcast_id=podcast.id, page=page-1, counter=counter-1) }}">Previous</a>
+
+                                    {% endif %}
+                                        <span>Page {{page}} of {{total}}</span>
+                                    {% if page < total %}
+                                    <a class="button" href="{{ url_for('description_bp.show_description',
+                                                            podcast_id=podcast.id, page=page+1, counter=counter-1) }}">Next</a>
+                                    <a class="button" href="{{ url_for('description_bp.show_description',
+                                                            podcast_id=podcast.id, page=total, counter=counter-1) }}">Last</a>
+                                    {% endif %}
+                                {% endif %}
+                                <table>
+                                    <tr>
+                                        <th><b>||||||||||||||||||||||||</b></th>
+                                        <th> </th>
+                                        <th><b>||||||||||</b></th>
+                                        <th> </th>
+                                        <th><b>||||||||||||||||||||||||</b></th>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th><i>Name</i></th>
+                                        <th></th>
+                                        <th><i>Date</i></th>
+                                        <th></th>
+                                    </tr>
+                                    {% for episode in episodes %}
+                                    <tr>
+                                        <th></th>
+                                        <th class="ep_title">{{ episode.title }}</th>
+                                        <th></th>
+                                        <th>{{ episode.pub_date }}</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th class = "end"><audio controls><source src="{{ episode.link }}" type="audio/mpeg"></audio></th>
+                                        <th></th>
+                                        {% if episode in playlist %}
+                                            <th class = "end"><a class="button" href="{{ url_for('description_bp.remove_from_playlist', episode_id=episode.id, counter=counter-1, page=page) }}" >Remove</a></th>
+                                        {% else %}
+                                            <th class = "end"><a class="button" href="{{ url_for('description_bp.add_to_playlist', episode_id=episode.id, counter=counter-1, page=page) }}">Add</a></th>
+                                        {% endif %}
+                                        <th></th>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <th><b>||||||||||||||||||||||||</b></th>
+                                        <th> </th>
+                                        <th></th>
+                                        <th> </th>
+                                        <th><b>||||||||||||||||||||||||</b></th>
+                                    </tr>
+                                </table>
+                            {% else %}
+                            <table>
+                                <tr>
+                                    <th><b>||||||||||||||||||||||||</b></th>
+                                    <th> </th>
+                                    <th><b>||||||||||||||||||||||||</b></th>
+                                </tr>
+                                <tr>
+                                    <th><b>||||||||||||||||||||||||</b></th>
+                                    <th>No Episodes out</th>
+                                    <th><b>||||||||||||||||||||||||</b></th>
+                                </tr>
+                                <tr>
+                                    <th><b>||||||||||||||||||||||||</b></th>
+                                    <th> </th>
+                                    <th><b>||||||||||||||||||||||||</b></th>
+                                </tr>
+                            </table>
+                            {% endif %}
+                            <br>
+                        </div>
+                    </div>
+                    <a class="button" href="{{ url_for('description_bp.review_on_podcast', podcast_id=podcast_id, counter=counter-2) }}">Comment</a>
+                    <br>
+                    <h3>Reviews:</h3>
+
+
+                        {% if podcast['reviews'] %}
+
+                            {% for review in podcast['reviews'] %}
+                                <div class="review-item">
+
+                                    <p><i>Date: </i>{{ review['review_time'] }}</p>
+                                    <p>Review by <i>{{ review['review_user'].username }}: </i></p>
+                                    <p><strong>{{ review['review_content'] }}</strong></p>
+                                    <p><i>Rating:</i> {{ review['podcast_rating'] }}/5</p>
+                                </div>
+                                <br>
+                            {% endfor %}
+                        {% else %}
+                            <div class="review-item">
+                                <p>No reviews yet. Be the first to write one!</p>
+                            </div>
+                        {% endif %}
+                    <br>
+                </div>
+              </main>
+            </div>
+{% endblock %}
